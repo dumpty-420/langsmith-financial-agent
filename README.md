@@ -22,6 +22,7 @@ A LangGraph-powered financial analysis agent that performs cash flow and spendin
 | Observability | LangSmith (`@traceable` decorators) |
 | API | FastAPI |
 | Database | PostgreSQL |
+| DB Client | DBeaver |
 | SQL Tools | Custom LangChain tools (schema, query, checker) |
 | Package Manager | uv |
 
@@ -110,14 +111,110 @@ POSTGRES_PASSWORD=admin
 
 Get your LangSmith key from [smith.langchain.com](https://smith.langchain.com) → Settings → API Keys.
 
-### 4. Set up PostgreSQL
+---
 
-Make sure PostgreSQL is running locally with a `transaction_db` database containing transaction data.
+## Database Setup (PostgreSQL + DBeaver)
 
-### 5. Run the server
+### Step 1 — Install PostgreSQL
+
+Download and install PostgreSQL from [postgresql.org/download](https://www.postgresql.org/download/). During installation set your password to `admin` (or update `.env` accordingly).
+
+### Step 2 — Install DBeaver
+
+Download DBeaver from [dbeaver.io](https://dbeaver.io/download/) — it's a free database GUI client.
+
+### Step 3 — Connect DBeaver to PostgreSQL
+
+1. Open DBeaver → click **New Database Connection**
+2. Select **PostgreSQL**
+3. Fill in:
+   - Host: `localhost`
+   - Port: `5432`
+   - Username: `postgres`
+   - Password: `admin`
+4. Click **Test Connection** → then **Finish**
+
+### Step 4 — Create the database
+
+In DBeaver, open a new SQL script and run:
+
+```sql
+CREATE DATABASE transaction_db;
+```
+
+Then switch to the `transaction_db` database (select it from the dropdown top right).
+
+### Step 5 — Create the tables
+
+Run these SQL scripts in DBeaver:
+
+**Cards table:**
+```sql
+CREATE TABLE IF NOT EXISTS cards_data_raw (
+    id INTEGER PRIMARY KEY,
+    client_id INTEGER,
+    card_brand TEXT,
+    card_type TEXT,
+    card_number BIGINT,
+    expires TEXT,
+    cvv INTEGER,
+    has_chip TEXT,
+    num_cards_issued INTEGER,
+    credit_limit TEXT,
+    acct_open_date TEXT,
+    year_pin_last_changed INTEGER,
+    card_on_dark_web TEXT
+);
+```
+
+**Transaction data table:**
+```sql
+CREATE TABLE IF NOT EXISTS public.transaction_data (
+    id BIGINT PRIMARY KEY,
+    transaction_date TIMESTAMP,
+    client_id INTEGER,
+    card_id INTEGER,
+    amount TEXT,
+    use_chip TEXT,
+    merchant_id INTEGER,
+    merchant_city TEXT,
+    merchant_state TEXT,
+    zip TEXT,
+    mcc INTEGER,
+    errors TEXT
+);
+```
+
+**Client data table:**
+```sql
+CREATE TABLE IF NOT EXISTS public.client_data (
+    id INTEGER PRIMARY KEY,
+    current_age INTEGER,
+    retirement_age INTEGER,
+    birth_year INTEGER,
+    birth_month INTEGER,
+    gender TEXT,
+    address TEXT,
+    latitude NUMERIC(9,6),
+    longitude NUMERIC(9,6),
+    per_capita_income TEXT,
+    yearly_income TEXT,
+    total_debt TEXT,
+    credit_score INTEGER,
+    num_credit_cards INTEGER
+);
+```
+
+### Step 6 — Load data
+
+Insert your financial data into the three tables. The agent will query these tables to perform cash flow and spending analysis.
+
+---
+
+### 4. Run the server
 
 ```bash
-uv run uvicorn main:app --reload
+uv run python main.py
 ```
 
 Open Swagger UI at `http://localhost:8000/docs`
@@ -194,6 +291,7 @@ View traces at [smith.langchain.com](https://smith.langchain.com) → your proje
 - Requires an active Anthropic API subscription with credits
 - LangSmith tracing is optional but recommended for debugging
 - PostgreSQL must be running locally before starting the server
+- Make sure the `transaction_db` database exists and all 3 tables are created before running the agent
 
 ---
 
