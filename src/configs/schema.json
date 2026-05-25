@@ -1,0 +1,59 @@
+{
+  "cards_data_raw": {
+    "table_label": "Cards Data Raw",
+    "columns": [
+      { "name": "id", "type": "integer", "description": "Primary key ID" },
+      { "name": "client_id", "type": "integer", "description": "Foreign key to client_data" },
+      { "name": "card_brand", "type": "text", "description": "Brand of the card" },
+      { "name": "card_type", "type": "text", "description": "Type of the card" },
+      { "name": "card_number", "type": "bigint", "description": "Card number" },
+      { "name": "expires", "type": "text", "description": "Expiration date" },
+      { "name": "cvv", "type": "integer", "description": "CVV" },
+      { "name": "has_chip", "type": "text", "description": "Has chip" },
+      { "name": "num_cards_issued", "type": "integer", "description": "Number of cards issued" },
+      { "name": "credit_limit", "type": "text", "description": "Credit limit" },
+      { "name": "acct_open_date", "type": "text", "description": "Account open date" },
+      { "name": "year_pin_last_changed", "type": "integer", "description": "Year PIN last changed" },
+      { "name": "card_on_dark_web", "type": "text", "description": "Is card on dark web" }
+    ],
+    "relationships": []
+  },
+  "transaction_data": {
+    "table_label": "Transaction Data",
+    "columns": [
+      { "name": "id", "type": "bigint", "description": "Primary key ID" },
+      { "name": "transaction_date", "type": "timestamp", "description": "Date of transaction" },
+      { "name": "client_id", "type": "integer", "description": "Foreign key to client_data" },
+      { "name": "card_id", "type": "integer", "description": "Foreign key to cards_data_raw" },
+      { "name": "amount", "type": "text", "description": "Transaction amount" },
+      { "name": "use_chip", "type": "text", "description": "Did transaction use chip" },
+      { "name": "merchant_id", "type": "integer", "description": "Merchant ID" },
+      { "name": "merchant_city", "type": "text", "description": "Merchant city" },
+      { "name": "merchant_state", "type": "text", "description": "Merchant state" },
+      { "name": "zip", "type": "text", "description": "ZIP code" },
+      { "name": "mcc", "type": "integer", "description": "MCC code" },
+      { "name": "errors", "type": "text", "description": "Errors during transaction" }
+    ],
+    "relationships": []
+  },
+  "client_data": {
+    "table_label": "Client Data",
+    "columns": [
+      { "name": "id", "type": "integer", "description": "Primary key and client identifier" },
+      { "name": "current_age", "type": "integer", "description": "Current age" },
+      { "name": "retirement_age", "type": "integer", "description": "Retirement age" },
+      { "name": "birth_year", "type": "integer", "description": "Birth year" },
+      { "name": "birth_month", "type": "integer", "description": "Birth month" },
+      { "name": "gender", "type": "text", "description": "Gender" },
+      { "name": "address", "type": "text", "description": "Address" },
+      { "name": "latitude", "type": "numeric(9,6)", "description": "Latitude" },
+      { "name": "longitude", "type": "numeric(9,6)", "description": "Longitude" },
+      { "name": "per_capita_income", "type": "text", "description": "Per capita income" },
+      { "name": "yearly_income", "type": "text", "description": "Yearly income" },
+      { "name": "total_debt", "type": "text", "description": "Total debt" },
+      { "name": "credit_score", "type": "integer", "description": "Credit score" },
+      { "name": "num_credit_cards", "type": "integer", "description": "Number of credit cards" }
+    ],
+    "relationships": []
+  }
+}

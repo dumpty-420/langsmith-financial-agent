@@ -1,0 +1,20 @@
+[project]
+name = "financial-analysis-agent"
+version = "0.1.0"
+description = "AI agents for SQL-based financial analysis on Transaction_DB with LangSmith tracing"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.115.0",
+    "uvicorn>=0.34.0",
+    "langchain>=0.3.0",
+    "langchain-google-genai>=2.0.0",
+    "langchain-anthropic>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langgraph>=0.2.0",
+    "langsmith>=0.2.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+]
